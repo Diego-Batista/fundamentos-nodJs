@@ -8,11 +8,18 @@ export const routes = [
   {
     method: 'GET',
     path: BuildRoutePath('/users'),
-    handler: (req, res) => {
-      const users = database.select('users')
+    handler: (request, response) => {
+      const { search } = request.query;
 
-      return res.end(JSON.stringify(users))
-    }
+      const searchData = search ? {
+        name: search,
+        email: search,
+      } : null;
+
+      const users = database.select('users', searchData);
+
+      return response.end(JSON.stringify(users));
+    },
   },
   {
     method: 'POST',
